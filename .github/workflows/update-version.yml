@@ -1,8 +1,9 @@
 name: Update Version inside PHP Code
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   update-version:
@@ -11,7 +12,6 @@ jobs:
       contents: write
 
     steps:
-    # ИСПРАВЛЕНО: Явно заставляем робота переключиться на ветку main
     - name: Checkout repository code
       uses: actions/checkout@v4
       with:
@@ -19,12 +19,13 @@ jobs:
 
     - name: Inject new version tag into Controller.php
       run: |
-        VERSION_NUM=$(echo "${{ github.event.release.tag_name }}" | sed 's/^v//')
+        # Берем имя тега из события push (например, refs/tags/v2.1.2) и чистим до 2.1.2
+        VERSION_NUM=$(echo "${{ github.ref_name }}" | sed 's/^v//')
         sed -i -E "s/(const VERSION\s*=\s*['\"])[^'\"]*['\"]/\1$VERSION_NUM'/g" core/Controller.php
 
     - name: Commit and Push automatically updated version
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: "chore: auto-update framework version to ${{ github.event.release.tag_name }} [skip ci]"
+        commit_message: "chore: auto-update framework version to ${{ github.ref_name }} [skip ci]"
         file_pattern: 'core/Controller.php'
         branch: main
