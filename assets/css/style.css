@@ -1,20 +1,3 @@
-p {
-  text-align: center;
-  font-size: 30px;
-  font-weight: 600;
-}
-
-a {
-    text-decoration: none;
-    color: black;
-}
-
-.mini-header {
-    display: flex;
-    justify-content: end;
-    gap: 10px;
-}
-
 /* 404 страница */
 .error-container {
     display: flex;

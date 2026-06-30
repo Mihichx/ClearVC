@@ -1,4 +1,5 @@
 <?php
+
 class Router
 {
     private $routes = [];
@@ -13,8 +14,8 @@ class Router
             ];
         }
     }
-    
-    public function dispatch(): void
+
+    public function dispatch($db): void
     {
         spl_autoload_register(function ($className) {
             $file = __DIR__ . '/controllers/' . $className . '.php';
@@ -32,7 +33,7 @@ class Router
                 continue;
             }
             if ($route['path'] === '*') {
-                if ($this->handleDynamicModules($uri)) {
+                if ($this->handleDynamicModules($uri, $db)) {
                     return;
                 }
                 continue;
@@ -43,7 +44,8 @@ class Router
             if (preg_match($pattern, $uri, $matches)) {
                 array_shift($matches);
                 [$controllerName, $action] = explode('@', $route['handler']);
-                $controller = new $controllerName();
+                
+                $controller = new $controllerName($db);
                 $controller->$action(...$matches);
                 return;
             }
@@ -52,34 +54,35 @@ class Router
         require_once __DIR__ . '/views/404.php';
         exit;
     }
-    private function handleDynamicModules(string $uri): bool
-{
-    $uriParts = trim($uri, '/');
-    if ($uriParts === '') {
+
+    private function handleDynamicModules(string $uri, $db): bool
+    {
+        $uriParts = trim($uri, '/');
+        if ($uriParts === '') {
+            return false;
+        }
+
+        $segments = explode('/', $uriParts);
+        $segmentCount = count($segments);
+        
+        if ($segmentCount === 1) {
+            $controllerClass = 'PageController';
+            $action = $segments[0];
+            $params = [];
+        } else {
+            $module = array_shift($segments);
+            $controllerClass = ucfirst($module) . 'Controller';
+            $action = array_shift($segments);
+            $params = $segments;
+        }
+        if (class_exists($controllerClass)) {
+            $controllerInstance = new $controllerClass($db);       
+            if (method_exists($controllerInstance, $action)) {
+                $controllerInstance->$action(...$params);
+                return true;
+            }
+        }
+
         return false;
     }
-
-    $segments = explode('/', $uriParts);
-    $segmentCount = count($segments);
-    
-    if ($segmentCount === 1) {
-        $controllerClass = 'PageController';
-        $action = $segments[0];
-        $params = [];
-    } else {
-        $module = array_shift($segments);
-        $controllerClass = ucfirst($module) . 'Controller';
-        $action = array_shift($segments);
-        $params = $segments;
-    }
-    if (class_exists($controllerClass)) {
-        $controllerInstance = new $controllerClass();       
-        if (method_exists($controllerInstance, $action)) {
-            $controllerInstance->$action(...$params);
-            return true;
-        }
-    }
-
-    return false;
-}
 }

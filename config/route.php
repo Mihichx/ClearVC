@@ -1,7 +1,9 @@
 <?php
+
 return [
-    ['/', 'HomeController@index'],
-    ['/about', 'AboutController@about'],
+    ['/', 'PageController@index'],
+    ['/docs', 'PageController@docs'],
+    ['/routes', 'PageController@routes'],
     ['*', 'DYNAMIC_MODULES_FALLBACK'],
     ['*', 'DYNAMIC_MODULES_FALLBACK', 'POST'],
 ];
