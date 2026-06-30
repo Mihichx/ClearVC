@@ -1,9 +1,8 @@
-name: Update Version inside PHP Code
+name: Update Version and Build Zip Asset
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [published]
 
 jobs:
   update-version:
@@ -17,15 +16,26 @@ jobs:
       with:
         ref: main
 
-    - name: Inject new version tag into Controller.php
-      run: |
-        # Берем имя тега из события push (например, refs/tags/v2.1.2) и чистим до 2.1.2
-        VERSION_NUM=$(echo "${{ github.ref_name }}" | sed 's/^v//')
-        sed -i -E "s/(const VERSION\s*=\s*['\"])[^'\"]*['\"]/\1$VERSION_NUM'/g" core/Controller.php
+    - name: Update version string in Controller.php
+      uses: jacobtomlinson/gha-find-replace@v3
+      with:
+        find: "const VERSION = '[^']*';"
+        replace: "const VERSION = '${{ github.event.release.tag_name }}';"
+        include: "core/Controller.php"
 
     - name: Commit and Push automatically updated version
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: "chore: auto-update framework version to ${{ github.ref_name }} [skip ci]"
+        commit_message: "chore: auto-update framework version to ${{ github.event.release.tag_name }} [skip ci]"
         file_pattern: 'core/Controller.php'
         branch: main
+
+    - name: Create ClearVC Framework Archive
+      run: |
+        zip -r clearvc-framework.zip . -x "*.git*" ".github*"
+
+    - name: Upload Clean Zip to Release Assets
+      uses: softprops/action-gh-release@v2
+      with:
+        files: clearvc-framework.zip
+        tag_name: ${{ github.event.release.tag_name }}
