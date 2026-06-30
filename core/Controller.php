@@ -2,7 +2,7 @@
 
 class Controller
 {   
-    const VERSION = 'v2.1.3'; 
+    const VERSION = 'v2.1.4'; 
 
     // Свойство для хранения объекта базы данных PDO
     protected $db;
