@@ -1,7 +1,9 @@
 <?php
 
 class Controller
-{
+{   
+    const VERSION = '2.0.0'; 
+
     // Свойство для хранения объекта базы данных PDO
     protected $db;
 

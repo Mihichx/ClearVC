@@ -1,0 +1,30 @@
+name: Update Version inside PHP Code
+
+# Робот запускается только в момент публикации нового релиза
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Даем роботу права на запись кода в репозиторий
+
+    steps:
+    - name: Checkout repository code
+      uses: actions/checkout@v4
+
+    - name: Inject new version tag into Controller.php
+      run: |
+        # Получаем имя тега (например, v2.1.0) и убираем букву "v", оставляя только 2.1.0
+        VERSION_NUM=$(echo "${{ github.event.release.tag_name }}" | sed 's/^v//')
+        
+        # Находим строку const VERSION = '...'; в файле и заменяем на актуальную версию
+        sed -i "s/const VERSION = '[^']*';/const VERSION = '$VERSION_NUM';/g" core/Controller.php
+
+    - name: Commit and Push automatically updated version
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "chore: auto-update framework version to ${{ github.event.release.tag_name }} [skip ci]"
+        file_pattern: 'core/Controller.php'

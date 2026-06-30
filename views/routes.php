@@ -1,4 +1,11 @@
 <div class="container my-4">
+    <!-- Кнопка возврата на главную -->
+    <div class="mb-4">
+        <a href="/" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 border-0 p-1 shadow-none hover-danger-btn">
+            <span>←</span> Вернуться на главную
+        </a>
+    </div>
+    
     <h1 class="mb-4">Карта маршрутов (Роуты)</h1>
     <p class="text-muted">Список всех адресов, которые сейчас обрабатывает <code>Router.php</code>.</p>
 

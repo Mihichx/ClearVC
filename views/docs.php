@@ -1,4 +1,11 @@
 <div class="container my-5">
+    <!-- Кнопка возврата на главную -->
+    <div class="mb-4">
+        <a href="/" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 border-0 p-1 shadow-none hover-danger-btn">
+            <span>←</span> Вернуться на главную
+        </a>
+    </div>
+
     <!-- Шапка документации -->
     <div class="p-5 mb-5 bg-dark text-white rounded-3 shadow-sm position-relative overflow-hidden">
         <div class="row align-items-center">
@@ -32,10 +39,11 @@
                 <div class="bg-light p-4 rounded border font-monospace text-secondary fs-7 shadow-sm">
                     <div class="mb-2"><span class="text-warning">📁 assets/</span> — папка для js, css, картинок и шрифтов</div>
                     <div class="ps-3 text-muted">├── 📁 bootstrap / 📁 css / 📁 img / 📁 fontAwesome</div>
-                    <div class="ps-3 text-muted mb-2">└── 📁 js/ — <span class="text-danger fw-bold">JS-файлы ОБЯЗАТЕЛЬНО ТУТ</span></div>
+                    <div class="ps-3 text-muted mb-2">└── 📁 js/ — <span class="text-danger fw-bold">JS-файлы</span></div>
                     
                     <div class="mb-2"><span class="text-warning">📁 config/</span> — конфигурационные файлы</div>
                     <div class="ps-3 text-muted">├── 📄 PDO.php — файл подключения к БД</div>
+                    <div class="ps-3 text-muted">├── 📄 config.example.php — шаблон конфига</div>
                     <div class="ps-3 text-muted">├── 📄 config.php — скрытые пароли от базы</div>
                     <div class="ps-3 text-muted mb-2">└── 📄 route.php — список явных путей сайта</div>
                     

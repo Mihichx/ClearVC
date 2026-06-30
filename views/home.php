@@ -9,12 +9,12 @@
         <div class="d-flex justify-content-center gap-4 text-uppercase fw-bold text-muted small tracking-widest mb-4">
             <a href="/docs" class="text-decoration-none text-secondary hover-danger">Documentation</a>
             <a href="/routes" class="text-decoration-none text-secondary hover-danger">Route Map</a>
-            <a href="https://github.com" target="_blank" class="text-decoration-none text-secondary hover-danger">GitHub</a>
+            <a href="https://github.com/Mihichx/ClearVC" target="_blank" class="text-decoration-none text-secondary hover-danger">GitHub</a>
         </div>
 
         <!-- Информация о системе -->
         <div class="text-muted small font-monospace">
-            ClearVC MicroFramework <span class="text-danger">v2.0.0</span> (PHP v<?= PHP_VERSION ?>)
+            ClearVC MicroFramework <span class="text-danger">v<?= Controller::VERSION ?></span> (PHP v<?= PHP_VERSION ?>)
         </div>
     </div>
 </div>
