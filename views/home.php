@@ -14,7 +14,7 @@
 
         <!-- Информация о системе -->
         <div class="text-muted small font-monospace">
-            ClearVC MicroFramework <span class="text-danger">v<?= Controller::VERSION ?></span> (PHP v<?= PHP_VERSION ?>)
+            ClearVC MicroFramework <span class="text-danger"><?= Controller::VERSION ?></span> (PHP v<?= PHP_VERSION ?>)
         </div>
     </div>
 </div>
