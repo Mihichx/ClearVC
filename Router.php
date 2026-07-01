@@ -1,9 +1,25 @@
 <?php
 
+/**
+ * Класс маршрутизатора (Router).
+ * Отвечает за регистрацию маршрутов и запуск соответствующих контроллеров.
+ */
 class Router
-{
+{   
+    /** 
+     * Массив со списком всех обработанных и зарегистрированных маршрутов.
+     * 
+     * @var array<int, array{path: string, handler: string, method: string}> 
+     */
     private $routes = [];
 
+    /**
+     * Регистрирует список маршрутов в системе.
+     * Преобразует плоский массив из конфига во внутреннюю структуру роутера.
+     * 
+     * @param array<int, array<int, string>> $routesList Массив маршрутов из config/route.php
+     * @return void
+     */
     public function add(array $routesList): void
     {
         foreach ($routesList as $route) {
@@ -15,6 +31,13 @@ class Router
         }
     }
 
+    /**
+     * Перехватывает текущий HTTP-запрос, ищет совпадение по базе маршрутов
+     * и передает управление нужному экшену контроллера.
+     * 
+     * @param PDO|null $db Объект подключения к базе данных PDO
+     * @return void
+     */
     public function dispatch($db): void
     {
         spl_autoload_register(function ($className) {
@@ -55,6 +78,14 @@ class Router
         exit;
     }
 
+    /**
+     * Обрабатывает динамические модули и многосегментные URL,
+     * когда в карте маршрутов сработал fallback-знак '*'.
+     * 
+     * @param string $uri Очищенный адресный путь страницы
+     * @param PDO|null $db Объект подключения к базе данных PDO
+     * @return bool Возвращает true, если контроллер и метод найдены и успешно вызваны
+     */
     private function handleDynamicModules(string $uri, $db): bool
     {
         $uriParts = trim($uri, '/');

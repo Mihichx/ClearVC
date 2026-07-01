@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Страница не найдена</title>
+    <title>403 - Доступ запрещен</title>
     <link rel="icon" type="image/png" href="/assets/img/ClearVC.svg">
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body class="d-flex h-100 text-center bg-light align-items-center justify-content-center">
     <main>
-        <h1 class="display-1 fw-bold text-danger m-0" style="font-size: 6rem; line-height: 1;">404</h1>
-        <p class="fs-4 text-secondary mt-2 mb-4">Страница не найдена</p>
+        <h1 class="display-1 fw-bold text-warning m-0" style="font-size: 7rem; line-height: 1;">403</h1>
+        <p class="fs-4 text-secondary mt-2 mb-4">Доступ ограничен</p>
         <a href="/" class="text-decoration-none text-muted border-bottom border-secondary hover-danger">На главную</a>
     </main>
 </body>

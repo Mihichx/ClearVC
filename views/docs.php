@@ -12,6 +12,7 @@
             <div class="col-md-8">
                 <h1 class="display-4 fw-bold">Документация <span class="text-danger">ClearVC</span></h1>
                 <p class="lead text-muted mb-0">Инструкция по настройке и использованию микрофреймворка.</p>
+                <p class="lead text-muted mb-0">Авторы: Бакулев М, Кириенков М, Фатахова С, Наумов А, Рагазина Е.</p>
             </div>
         </div>
     </div>
@@ -113,7 +114,6 @@ class AboutController extends Controller
 }</pre>
                     </div>
 
-                        <!-- Шаг 3: Создание представления (View) -->
                     <div class="mb-4">
                         <h5>3. Создание представления (View)</h5>
                         <p class="text-muted">В папке <code>views/</code> создайте файл отображения для вашей страницы (например, <code>about.php</code>). Используйте переменные, которые вы передали из контроллера:</p>
@@ -130,7 +130,7 @@ class AboutController extends Controller
     &lt;/div&gt;
 &lt;/div&gt;</pre>
                         <span class="text-muted small mt-1 d-block">
-                            💡 **Важно:** Движок автоматически обернет этот код в ваш главный шаблон <code>layouts/main.php</code>, подставив шапку, подвал и заголовок.
+                            💡 **Важно:** Микрофреймворк автоматически обернет этот код в ваш главный шаблон <code>layouts/main.php</code>, подставив шапку, подвал и заголовок.
                         </span>
                     </div>
 

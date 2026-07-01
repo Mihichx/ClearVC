@@ -1,18 +1,30 @@
 <?php
 
 class Controller
-{   
+{    
+    /** @var string Версия контроллера/приложения */
     const VERSION = 'v2.1.1'; 
 
-    // Свойство для хранения объекта базы данных PDO
+    /** @var PDO|null Объект базы данных для выполнения запросов */
     protected $db;
 
-    // Конструктор принимает соединение при создании любого контроллера
+    /**
+     * Конструктор принимает соединение при создании любого контроллера
+     * 
+     * @param PDO|null $dbConnection
+     */
     public function __construct(?PDO $dbConnection = null)
     {
         $this->db = $dbConnection;
     }
 
+     /**
+     * Рендерит указанный шаблон и автоматически прокидывает 
+     * в него переменную $auth_user (данные пользователя из сессии).
+     * 
+     * @param string $view Имя файла шаблона (например, 'home')
+     * @param array $data Массив данных для отображения
+     */
     protected function render($view, $data = [])
     {
         $data['auth_user'] = $_SESSION['user'] ?? null;
