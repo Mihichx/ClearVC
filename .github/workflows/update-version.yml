@@ -33,16 +33,6 @@ jobs:
     - name: Update tag to include version change
       run: |
         git config --global user.name "github-actions[bot]"
-        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --global user.email "41898282+github-actions[bot]@://github.com"
         git tag -f ${{ github.event.release.tag_name }}
         git push origin ${{ github.event.release.tag_name }} --force
-
-    - name: Create ClearVC Framework Archive
-      run: |
-        zip -r clearvc-framework.zip . -x "*.git*" ".github*"
-
-    - name: Upload Clean Zip to Release Assets
-      uses: softprops/action-gh-release@v2
-      with:
-        files: clearvc-framework.zip
-        tag_name: ${{ github.event.release.tag_name }}
