@@ -30,6 +30,13 @@ jobs:
         file_pattern: 'core/Controller.php'
         branch: main
 
+    - name: Update tag to include version change
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git tag -f ${{ github.event.release.tag_name }}
+        git push origin ${{ github.event.release.tag_name }} --force
+
     - name: Create ClearVC Framework Archive
       run: |
         zip -r clearvc-framework.zip . -x "*.git*" ".github*"
