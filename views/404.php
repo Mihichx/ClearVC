@@ -12,7 +12,7 @@
     <main>
         <h1 class="display-1 fw-bold text-danger m-0" style="font-size: 6rem; line-height: 1;">404</h1>
         <p class="fs-4 text-secondary mt-2 mb-4">Страница не найдена</p>
-        <a href="/" class="text-decoration-none text-muted border-bottom border-secondary hover-danger">На главную</a>
+        <a href="/" class="text-decoration-none text-muted border-bottom border-secondary hover-danger p-2">На главную</a>
     </main>
 </body>
 </html>

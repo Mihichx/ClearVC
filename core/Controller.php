@@ -1,5 +1,7 @@
 <?php
 
+namespace Core;
+
 class Controller
 {    
     /** @var string Версия контроллера/приложения */
