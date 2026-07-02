@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 75vh;">
     <div class="text-center">
-        <!-- Наш фирменный логотип -->
+        <!-- Название -->
         <h1 class="display-1 fw-light text-dark mb-4" style="letter-spacing: .15rem;">
             Clear<span class="fw-normal text-danger">VC</span>
         </h1>
@@ -14,7 +14,7 @@
 
         <!-- Информация о системе -->
         <div class="text-muted small font-monospace">
-            ClearVC MicroFramework <span class="text-danger"><?= Controller::VERSION ?></span> (PHP v<?= PHP_VERSION ?>)
+            ClearVC MicroFramework <span class="text-danger"><?= \Core\Controller::VERSION ?></span> (PHP v<?= PHP_VERSION ?>)
         </div>
     </div>
 </div>

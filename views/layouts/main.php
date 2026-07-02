@@ -1,5 +1,14 @@
-<?php session_start();?>
+<?php 
 
+session_start();
+/** 
+ * Главный шаблон (Layout) сайта.
+ * 
+ * @var string $content HTML-код конкретной страницы (View)
+ * @var array|null $auth_user Массив с данными авторизованного пользователя из сессии
+ * @var string|null $title Заголовок страницы (если передан из контроллера)
+ */
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -22,35 +31,33 @@
     <!--JS общий для всех страниц-->
     <script src="/assets/js/script.js" defer></script>
 
-    <!-- js рендера (подставляется отдельно для каждой страницы)-->
-    <?if (!empty($js)){
-        $jsArr = explode(", ", $js);
-        foreach($jsArr as $jsItem){?>
-        <script src="/assets/js/<?= htmlspecialchars($jsItem) ?>" defer></script>
-    <?}
-    }?>
+    <!-- js рендера (подставляется отдельно для каждой страницы) -->
+    <?php if (!empty($js)): ?>
+        <?php $jsArr = explode(", ", $js); ?>
+        <?php foreach ($jsArr as $jsItem): ?>
+            <script src="/assets/js/<?= htmlspecialchars($jsItem) ?>" defer></script>
+        <?php endforeach; ?>
+    <?php endif; ?>
     
 </head>
 <body>
-    
     <!---------------------------------------------------Шапка--------------------------------------------------->
     <header>
-    <!-- прописываем здесь свой хедер, путь прописывать без расширения -->
+
     </header>
 
     
     <!---------------------------------------------------Основа--------------------------------------------------->
     <main>
-        <!-- сюда подключится представление из папки view -->
+        <!-- Сюда подключится представление из папки view -->
         <?= $content ?>
     </main>
 
 
     <!---------------------------------------------------Подвал--------------------------------------------------->
     <footer>
-    <!-- тут разместить подвал -->
-    </footer>
 
+    </footer>
     <!--Bootstrap JS-->
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>

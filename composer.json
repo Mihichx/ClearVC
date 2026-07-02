@@ -1,0 +1,16 @@
+{
+    "name": "mihichx/clearvc",
+    "description": "ClearVC PHP Framework",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\": "core/",
+            "App\\Controllers\\": "controllers/",
+            "App\\Config\\": "config/"
+        }
+    }
+}

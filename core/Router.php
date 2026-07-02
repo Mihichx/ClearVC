@@ -1,9 +1,27 @@
 <?php
 
+namespace Core;
+
+/**
+ * Класс маршрутизатора (Router).
+ * Отвечает за регистрацию маршрутов и запуск соответствующих контроллеров.
+ */
 class Router
-{
+{   
+    /** 
+     * Массив со списком всех обработанных и зарегистрированных маршрутов.
+     * 
+     * @var array<int, array{path: string, handler: string, method: string}> 
+     */
     private $routes = [];
 
+    /**
+     * Регистрирует список маршрутов в системе.
+     * Преобразует плоский массив из конфига во внутреннюю структуру роутера.
+     * 
+     * @param array<int, array<int, string>> $routesList Массив маршрутов из config/route.php
+     * @return void
+     */
     public function add(array $routesList): void
     {
         foreach ($routesList as $route) {
@@ -15,15 +33,15 @@ class Router
         }
     }
 
+    /**
+     * Перехватывает текущий HTTP-запрос, ищет совпадение по базе маршрутов
+     * и передает управление нужному экшену контроллера.
+     * 
+     * @param PDO|null $db Объект подключения к базе данных PDO
+     * @return void
+     */
     public function dispatch($db): void
     {
-        spl_autoload_register(function ($className) {
-            $file = __DIR__ . '/controllers/' . $className . '.php';
-            if (file_exists($file)) {
-                require_once $file;
-            }
-        });
-
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $uri = rtrim($uri, '/');
@@ -44,17 +62,25 @@ class Router
             if (preg_match($pattern, $uri, $matches)) {
                 array_shift($matches);
                 [$controllerName, $action] = explode('@', $route['handler']);
-                
-                $controller = new $controllerName($db);
+                $fullControllerClass = 'App\\Controllers\\' . $controllerName;
+                $controller = new $fullControllerClass($db);
                 $controller->$action(...$matches);
                 return;
             }
         }
         http_response_code(404);
-        require_once __DIR__ . '/views/404.php';
+        require_once __DIR__ . '/../views/404.php';
         exit;
     }
 
+    /**
+     * Обрабатывает динамические модули и многосегментные URL,
+     * когда в карте маршрутов сработал fallback-знак '*'.
+     * 
+     * @param string $uri Очищенный адресный путь страницы
+     * @param PDO|null $db Объект подключения к базе данных PDO
+     * @return bool Возвращает true, если контроллер и метод найдены и успешно вызваны
+     */
     private function handleDynamicModules(string $uri, $db): bool
     {
         $uriParts = trim($uri, '/');
@@ -75,8 +101,10 @@ class Router
             $action = array_shift($segments);
             $params = $segments;
         }
-        if (class_exists($controllerClass)) {
-            $controllerInstance = new $controllerClass($db);       
+
+        $fullControllerClass = 'App\\Controllers\\' . $controllerClass;
+        if (class_exists($fullControllerClass)) {
+            $controllerInstance = new $fullControllerClass($db);      
             if (method_exists($controllerInstance, $action)) {
                 $controllerInstance->$action(...$params);
                 return true;
