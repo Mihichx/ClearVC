@@ -48,13 +48,18 @@
                     <div class="ps-3 text-muted">├── 📄 config.php — скрытые пароли от базы</div>
                     <div class="ps-3 text-muted mb-2">└── 📄 route.php — список явных путей сайта</div>
                     
-                    <div class="mb-2"><span class="text-primary">📁 controllers/</span> — основная логика страниц (обработка БД)</div>
-                    <div class="mb-2"><span class="text-danger">📁 core/</span> — служебное ядро фреймворка</div>
+                    <div class="mb-2"><span class="text-primary">📁 controllers/</span> — логика страниц (<span class="text-secondary">namespace App\Controllers</span>)</div>
+                    
+                    <div class="mb-2"><span class="text-danger">📁 core/</span> — служебное ядро фреймворка (<span class="text-secondary">namespace Core</span>)</div>
+                    <div class="ps-3 text-muted">├── 📄 Controller.php — базовый класс</div>
+                    <div class="ps-3 text-muted mb-2">└── 📄 Router.php — системный роутер фреймворка</div>
                     
                     <div class="mb-2"><span class="text-success">📁 views/</span> — визуальный вид страниц (HTML/вывод из БД)</div>
                     <div class="ps-3 text-muted mb-2">└── 📁 layouts/main.php — основной шаблон (Head, Header, Footer)</div>
                     
-                    <div class="mt-3 text-muted">📄 .htaccess / index.php / Router.php — служебные файлы</div>
+                    <div class="mb-2"><span class="text-dark fw-bold">📁 vendor/</span> — автозагрузчик и сторонние библиотеки Composer</div>
+                    
+                    <div class="mt-3 text-muted">📄 .htaccess / index.php / composer.json / composer.lock — служебные файлы</div>
                 </div>
             </section>
 
@@ -88,14 +93,20 @@
                 <div class="timeline">
                     
                     <div class="mb-4">
-                        <h5>1. База данных</h5>
-                        <p class="text-muted">Создайте файл <code>config/config.php</code> по образцу <code>config/config.example.php</code>. Подключение произойдет автоматически в главном файле <code>index.php</code>.</p>
+                        <h5>1. Инициализация и База данных</h5>
+                        <p class="text-muted">Откройте консоль в корне проекта и выполните команду <code>composer install</code> для сборки автозагрузчика классов PSR-4. Затем создайте файл <code>config/config.php</code> по образцу <code>config/config.example.php</code> для подключения к MySQL.</p>
                     </div>
 
                     <div class="mb-4">
                         <h5>2. Создание файла логики (Controller)</h5>
-                        <p class="text-muted">Создайте класс в папке <code>controllers/</code>.
+                        <p class="text-muted">Создайте класс в папке <code>controllers/</code>. Благодаря Composer ручные подключения файлов больше не нужны, обязательно указывайте пространство имен:</p>
                         <pre class="bg-dark text-light p-3 rounded font-monospace small">
+&lt;?php
+
+namespace App\Controllers; // Указываем пространство имен
+
+use Core\Controller;       // Импортируем базовый контроллер ядра
+
 class AboutController extends Controller
 {
     public function about()

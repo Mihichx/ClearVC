@@ -9,7 +9,6 @@ session_start();
  * @var string|null $title Заголовок страницы (если передан из контроллера)
  */
 ?>
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -32,17 +31,16 @@ session_start();
     <!--JS общий для всех страниц-->
     <script src="/assets/js/script.js" defer></script>
 
-    <!-- js рендера (подставляется отдельно для каждой страницы)-->
-    <?if (!empty($js)){
-        $jsArr = explode(", ", $js);
-        foreach($jsArr as $jsItem){?>
-        <script src="/assets/js/<?= htmlspecialchars($jsItem) ?>" defer></script>
-    <?}
-    }?>
+    <!-- js рендера (подставляется отдельно для каждой страницы) -->
+    <?php if (!empty($js)): ?>
+        <?php $jsArr = explode(", ", $js); ?>
+        <?php foreach ($jsArr as $jsItem): ?>
+            <script src="/assets/js/<?= htmlspecialchars($jsItem) ?>" defer></script>
+        <?php endforeach; ?>
+    <?php endif; ?>
     
 </head>
 <body>
-    
     <!---------------------------------------------------Шапка--------------------------------------------------->
     <header>
 
@@ -60,7 +58,6 @@ session_start();
     <footer>
 
     </footer>
-
     <!--Bootstrap JS-->
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>

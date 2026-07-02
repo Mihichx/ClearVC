@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../core/Controller.php';
+namespace App\Controllers;
+
+use Core\Controller;
 
 /**
  * Контроллер для обработки основных и динамических страниц сайта.
