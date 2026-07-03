@@ -2,8 +2,19 @@
 
 session_start();
 
-// Подключаем единый автозагрузчик Composer
-require_once __DIR__ . '/vendor/autoload.php';
+$autoloadPath = __DIR__ . '/vendor/autoload.php';
+
+// Проверяем наличие автозагрузчика Composer
+if (!file_exists($autoloadPath)) {
+    http_response_code(500);
+    
+    // Ищем папку views относительно корня проекта (где лежит index.php)
+    require_once __DIR__ . '/views/composer_error.php';
+    
+    exit;
+}
+
+require_once $autoloadPath;
 
 /** @var PDO $connect */
 require_once __DIR__ . '/config/PDO.php';
