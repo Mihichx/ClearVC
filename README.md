@@ -14,6 +14,8 @@ project/
 │
 ├── 📁 controllers/             - Контроллеры сайта (App\Controllers)
 ├── 📁 core/                    - Служебное ядро фреймворка (Core)
+|   ├── 📁 Helpers/             - Вспомогательные функции фреймворка (namespace Core\Helpers)
+│   │   └── 📄 Image.php        - Загрузка, выгрузка и удаление аватара
 │   ├── 📄 Controller.php       - Базовый контроллер ядра
 │   └── 📄 Router.php           - Системный маршрутизатор (Роутер)
 │
