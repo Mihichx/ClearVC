@@ -2,3 +2,4 @@
 * text=auto
 assets/bootstrap/** linguist-vendored
 assets/fontAwesome/** linguist-vendored
+*.php linguist-language=PHP
