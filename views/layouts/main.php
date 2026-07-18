@@ -1,6 +1,5 @@
 <?php 
 
-session_start();
 /** 
  * Главный шаблон (Layout) сайта.
  * 
