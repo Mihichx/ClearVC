@@ -38,11 +38,11 @@
             <section id="structure" class="mb-5">
                 <h3 class="pb-2 border-bottom fw-bold text-dark">Структура ClearVC</h3>
                 <div class="bg-light p-4 rounded border font-monospace text-secondary fs-7 shadow-sm">
-                    <div class="mb-2"><span class="text-warning">📁 assets/</span> — папка для js, css, картинок и шрифтов</div>
+                    <div class="mb-2"><span class="fw-bold">📁 assets/</span> — папка для js, css, картинок и шрифтов</div>
                     <div class="ps-3 text-muted">├── 📁 bootstrap / 📁 css / 📁 img / 📁 fontAwesome</div>
-                    <div class="ps-3 text-muted mb-2">└── 📁 js/ — <span class="text-danger fw-bold">JS-файлы</span></div>
+                    <div class="ps-3 text-muted mb-2">└── 📁 js/ — JS-файлы</div>
                     
-                    <div class="mb-2"><span class="text-warning">📁 config/</span> — конфигурационные файлы</div>
+                    <div class="mb-2"><span class="fw-bold">📁 config/</span> — конфигурационные файлы</div>
                     <div class="ps-3 text-muted">├── 📄 PDO.php — файл подключения к БД</div>
                     <div class="ps-3 text-muted">├── 📄 config.example.php — шаблон конфига</div>
                     <div class="ps-3 text-muted">├── 📄 config.php — скрытые пароли от базы</div>
@@ -50,14 +50,16 @@
                     
                     <div class="mb-2"><span class="text-primary">📁 controllers/</span> — логика страниц (<span class="text-secondary">namespace App\Controllers</span>)</div>
                     
-                    <div class="mb-2"><span class="text-danger">📁 core/</span> — служебное ядро фреймворка (<span class="text-secondary">namespace Core</span>)</div>
+                    <div class="mb-2"><span class="fw-bold">📁 core/</span> — служебное ядро фреймворка (<span class="text-secondary">namespace Core</span>)</div>
+                    <div class="ps-3">├── <span class="text-danger">📁 Helpers/</span> — вспомогательные функции фреймворка (<span class="text-secondary">namespace Core\Helpers</span>)</div>
+                    <div class="ps-5 text-muted">└── 📄 Image.php — загрузка, выгрузка и удаление аватара</div>
                     <div class="ps-3 text-muted">├── 📄 Controller.php — базовый класс</div>
                     <div class="ps-3 text-muted mb-2">└── 📄 Router.php — системный роутер фреймворка</div>
                     
                     <div class="mb-2"><span class="text-success">📁 views/</span> — визуальный вид страниц (HTML/вывод из БД)</div>
                     <div class="ps-3 text-muted mb-2">└── 📁 layouts/main.php — основной шаблон (Head, Header, Footer)</div>
                     
-                    <div class="mb-2"><span class="text-dark fw-bold">📁 vendor/</span> — автозагрузчик и сторонние библиотеки Composer</div>
+                    <div class="mb-2"><span class="fw-bold">📁 vendor/</span> — автозагрузчик и сторонние библиотеки Composer</div>
                     
                     <div class="mt-3 text-muted">📄 .htaccess / index.php / composer.json / composer.lock — служебные файлы</div>
                 </div>
@@ -66,21 +68,29 @@
             <!-- Описание работы -->
             <section id="how-it-works" class="mb-5">
                 <h3 class="pb-2 border-bottom fw-bold text-dark">Описание работы микрофреймворка</h3>
-                <p>Этот микрофреймворк разделяет логику (работу с БД) и отображение (HTML) по классической паттерну VC.</p>
+                <p>Этот микрофреймворк разделяет логику (работу с БД) и отображение (HTML) по классическому паттерну VC.</p>
                 <div class="row g-4 mt-2">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="card h-100 border-0 shadow-sm bg-light">
                             <div class="card-body">
-                                <h5 class="card-title fw-bold text-success">1. Создаёшь вид (view)</h5>
-                                <p class="card-text text-muted small">Чистая HTML верстка или циклы для вывода данных. Движок сам подставит шапку, тайтл и подвал из <code>layouts/main.php</code>.</p>
+                                <h5 class="card-title fw-bold text-primary">1. Создаёшь контроллер (controller)</h5>
+                                <p class="card-text text-muted small">В нём пишешь запросы к базе данных, обрабатываешь логику, используешь готовые утилиты ядра и отдаешь переменные через <code>render</code> виду.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="card h-100 border-0 shadow-sm bg-light">
                             <div class="card-body">
-                                <h5 class="card-title fw-bold text-primary">2. Создаёшь контроллер (controller)</h5>
-                                <p class="card-text text-muted small">В нём пишешь запросы к базе данных, обрабатываешь логику и отдаешь переменные через <code>render</code> виду.</p>
+                                <h5 class="card-title fw-bold text-danger">2. Используешь хелперы (helpers)</h5>
+                                <p class="card-text text-muted small">Вызываешь глобальные инструменты ядра (например, <code>Image::load()</code>) в одну строчку кода, полностью избавляясь от рутины.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-success">3. Создаёшь вид (view)</h5>
+                                <p class="card-text text-muted small">Чистая HTML верстка или циклы для вывода данных. Движок сам подставит шапку, тайтл и подвал из <code>layouts/main.php</code>.</p>
                             </div>
                         </div>
                     </div>
