@@ -1,8 +1,8 @@
-<?
+<?php
 
 namespace Core\Helpers;
 
-class Image
+class Image // TODO: Проверить работоспособность 
 {
     public static function load($connect)
     {

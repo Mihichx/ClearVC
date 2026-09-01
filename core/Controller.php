@@ -15,7 +15,7 @@ class Controller
      * 
      * @param PDO|null $dbConnection
      */
-    public function __construct(?\PDO $dbConnection = null)
+    public function __construct(?\PDO $dbConnection = null) // TODO: Изучить насколько это не костыль
     {
         $this->db = $dbConnection;
     }
