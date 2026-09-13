@@ -9,16 +9,6 @@ use Core\Controller;
  */
 class PageController extends Controller 
 {   
-    /**
-     * Обработка динамических страниц (вызывается через роут '*').
-     * 
-     * @return void
-     */
-    public function page() 
-    {   
-        echo "Динамические page работает из папки controllers!"; 
-    }
-
      /**
      * Отображает главную страницу сайта.
      * 

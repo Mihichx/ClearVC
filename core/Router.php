@@ -25,10 +25,15 @@ class Router
     public function add(array $routesList): void
     {
         foreach ($routesList as $route) {
+            if (!isset($route[2])) {
+                throw new \InvalidArgumentException(
+                    "Ошибка регистрации маршрута [{$route[0]}]: HTTP-метод должен быть указан явно."
+                );
+            }
             $this->routes[] = [
                 'path'    => $route[0],
                 'handler' => $route[1],
-                'method'  => $route[2] ?? 'GET',
+                'method'  => strtoupper($route[2]),
             ];
         }
     }
@@ -69,7 +74,9 @@ class Router
             }
         }
         http_response_code(404);
-        require_once __DIR__ . '/../views/404.php';
+        $error = 404;
+        $text_error = 'Страница не найдена';
+        require_once __DIR__ . '/../views/errors/http.php';
         exit;
     }
 

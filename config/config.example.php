@@ -8,6 +8,10 @@
  * и настраиваться индивидуально на каждом сервере.
  *
  * @return array{
+ *     app: array{
+ *         debug: bool
+ *     }
+ * 
  *     db: array{
  *         host: string,
  *         dbname: string,
@@ -18,6 +22,10 @@
  * }
  */
 return [
+    'app' => [
+        'debug' => true,
+    ],
+
     'db' => [
         'host'     => 'your',
         'dbname'   => 'your',
@@ -25,5 +33,4 @@ return [
         'password' => 'your',
         'charset'  => 'utf8mb4'
     ],
-    // Сюда в будущем можно будет дописывать другие настройки фреймворка
 ];

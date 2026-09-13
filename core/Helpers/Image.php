@@ -2,7 +2,7 @@
 
 namespace Core\Helpers;
 
-class Image // TODO: Проверить работоспособность 
+class Image
 {
     public static function load($connect)
     {
