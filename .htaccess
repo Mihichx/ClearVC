@@ -1,10 +1,67 @@
+# 1. Запрет отображения структуры папок
+Options -Indexes
+
+# 2. Основной роутинг ClearVC и перехват запрещенных папок
 RewriteEngine On
 
-RewriteCond %{REQUEST_URI} \.(css|js|jpg|png|gif|svg)$ [NC]
-RewriteCond %{HTTP_REFERER} !^https?://([^/]+) [NC]
-RewriteCond %1 !^%{HTTP_HOST}$ [NC]
-RewriteRule .* - [F,L]
+# Если пользователь пытается открыть config, core, controllers или views напрямую —
+# принудительно отправляем его на роутер с фейковым адресом /error-404
+RewriteRule ^(config|core|controllers|views)(/|$) index.php [QSA,L]
 
+# Запрет подозрительных запросов (сдвоенные слэши, системные файлы Linux)
+RewriteCond %{THE_REQUEST} \s/{2,}[^\s]*\s [OR]
+RewriteCond %{REQUEST_URI} (etc|hosts|passwd) [NC]
+RewriteRule ^ - [F,L]
+
+# Если запрос идет к реальному файлу или папке (например, в assets) — отдаем напрямую
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.php [QSA,L]
+
+# В ином случае перенаправляем всё на корневую точку входа index.php
+RewriteRule ^(.*)$ index.php [QSA,L]    
+
+# Запрет подозрительных запросов (сдвоенные слэши, системные файлы)
+RewriteCond %{THE_REQUEST} \s/{2,}[^\s]*\s [OR]
+RewriteCond %{REQUEST_URI} (etc|hosts|passwd) [NC]
+RewriteRule ^ - [F,L]
+
+# Если запрос идет к реальному файлу или папке в public — отдаем его напрямую
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# В ином случае перенаправляем всё на единую точку входа index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# 3. Безопасность сессий PHP
+php_value session.cookie_httponly 1
+
+# 4. Блок кэширования (Сроки)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 month"
+</IfModule>
+
+# 5. Блок заголовков (Безопасность и Cache-Control)
+<IfModule mod_headers.c>
+    # Защита от clickjacking и MIME-sniffing
+    Header set X-Frame-Options "DENY"
+    Header set X-Content-Type-Options "nosniff"
+
+    # Контроль кэша для CSS и JS (1 неделя)
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=604800, must-revalidate"
+    </FilesMatch>
+
+    # Контроль кэша для изображений (1 месяц)
+    <FilesMatch "\.(jpg|jpeg|png|webp|gif|ico)$">
+        Header set Cache-Control "public, max-age=2592000, must-revalidate"
+    </FilesMatch>
+
+    # Валидация изменений
+    FileETag MTime Size
+</IfModule>

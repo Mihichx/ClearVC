@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="/assets/fontAwesome/css/all.css">
 
     <!--JS общий для всех страниц-->
-    <script src="/assets/js/script.js" defer></script>
+    <script src="/assets/js/script.js"></script>
 
     <!-- js рендера (подставляется отдельно для каждой страницы) -->
     <?php if (!empty($js)): ?>

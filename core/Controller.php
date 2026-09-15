@@ -5,7 +5,7 @@ namespace Core;
 class Controller
 {    
     /** @var string Версия приложения */
-    const VERSION = 'v3.0.2'; 
+    const VERSION = 'v3.1.2'; 
 
     /** @var PDO|null Объект базы данных для выполнения запросов */
     protected $db;

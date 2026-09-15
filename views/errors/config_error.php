@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Ошибка инициализации ClearVC</title>
+    <?php if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/assets/img/ClearVC.svg")): ?>
+        <link rel="icon" type="image/png" href="/assets/img/ClearVC.svg">
+    <?php endif; ?>
     <style>
         body { background: #f7fafc; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
         .error-card { padding: 30px; background: #fff; border: 1px solid #e2e8f0; border-top: 5px solid #e53e3e; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border-radius: 8px; max-width: 500px; width: 100%; }

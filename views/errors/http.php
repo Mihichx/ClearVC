@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($error) ?> - <?= htmlspecialchars($text_error) ?></title>
+    <?php if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/assets/img/ClearVC.svg")): ?>
+        <link rel="icon" type="image/png" href="/assets/img/ClearVC.svg">
+    <?php endif; ?>
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
     <style> body { font-family: 'SF Pro Display', -apple-system, sans-serif; } .error-divider { border-right: 2px solid #dee2e6; } .hover-danger:hover { color: #dc3545 !important; border-color: #dc3545 !important; transition: color 0.2s ease-in-out; } </style>
 </head>

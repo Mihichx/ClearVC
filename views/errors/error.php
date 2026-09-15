@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title><?= htmlspecialchars($exception->getMessage()) ?></title>
+    <?php if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/assets/img/ClearVC.svg")): ?>
+        <link rel="icon" type="image/png" href="/assets/img/ClearVC.svg">
+    <?php endif; ?>
     <style>
         body { 
             font-family: 'SF Pro Display', -apple-system, sans-serif; 
