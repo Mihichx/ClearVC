@@ -1,5 +1,13 @@
+<?php
+
+/** 
+ * @var string|int $error Код ошибки (например, 404)
+ * @var string $text_error Текст ошибки (например, Страница не найдена)
+ */
+?>
 <!DOCTYPE html>
 <html lang="ru" class="h-100">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +16,23 @@
         <link rel="icon" type="image/png" href="/assets/img/ClearVC.svg">
     <?php endif; ?>
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
-    <style> body { font-family: 'SF Pro Display', -apple-system, sans-serif; } .error-divider { border-right: 2px solid #dee2e6; } .hover-danger:hover { color: #dc3545 !important; border-color: #dc3545 !important; transition: color 0.2s ease-in-out; } </style>
+    <style>
+        body {
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
+        }
+
+        .error-divider {
+            border-right: 2px solid #dee2e6;
+        }
+
+        .hover-danger:hover {
+            color: #dc3545 !important;
+            border-color: #dc3545 !important;
+            transition: color 0.2s ease-in-out;
+        }
+    </style>
 </head>
+
 <body class="d-flex h-100 text-center bg-light align-items-center justify-content-center">
     <main>
         <div class="d-flex align-items-center justify-content-center mb-4">
@@ -18,4 +41,5 @@
         </div>
     </main>
 </body>
+
 </html>

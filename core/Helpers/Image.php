@@ -2,11 +2,16 @@
 
 namespace Core\Helpers;
 
+use PDO;
+
 class Image
 {
-    public static function load($connect)
+    public static function load(?PDO $connect)
     {
-        if (empty($_SESSION['user'])) { header('Location: /'); exit; } 
+        if (empty($_SESSION['user'])) {
+            header('Location: /');
+            exit;
+        }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!empty($_FILES['img']) && $_FILES['img']['error'] === 0) {
@@ -20,13 +25,17 @@ class Image
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);  // Создаём папку аватарок если нету
 
                 $extension = mb_strtolower(pathinfo($img_name, PATHINFO_EXTENSION));  // Находим тип файла
-                if (!in_array($extension, $white_extension, true)){ $_SESSION['error'] = 'Данный формат файла не поддерживается'; header('Location: /img'); exit; }  // Проверяем на разрешённые типы
+                if (!in_array($extension, $white_extension, true)) {
+                    $_SESSION['error'] = 'Данный формат файла не поддерживается';
+                    header('Location: /img');
+                    exit;
+                }  // Проверяем на разрешённые типы
 
                 $new_name_img = $user_name . '.' . $extension;  // Генерируем новое название (логин.тип)
                 $finalPath = $uploadDir . $new_name_img;       // Финальный путь с названием файла
 
                 // Проверка на существование аватар
-                self::delete($connect, $user_id, $uploadDir);
+                self::delete($connect);
 
                 if (move_uploaded_file($tmpPath, $finalPath)) {  // Выполняет перенос файла и проверяет, успешно ли он завершился
                     $stmt = $connect->prepare("INSERT INTO `avatar`(`user_id`, `name`) VALUES (?, ?)");  // Записываем имя файла в БД
@@ -35,10 +44,14 @@ class Image
                     header('Location: /profile');
                     exit;
                 } else {
-                    $_SESSION['error'] = 'Ошибка при сохранении файла'; header('Location: /img'); exit;
+                    $_SESSION['error'] = 'Ошибка при сохранении файла';
+                    header('Location: /img');
+                    exit;
                 }
             } else {
-                $_SESSION['error'] = 'Вы не загрузили файл'; header('Location: /img'); exit;
+                $_SESSION['error'] = 'Вы не загрузили файл';
+                header('Location: /img');
+                exit;
             }
         }
 
@@ -48,7 +61,7 @@ class Image
         return $error;
     }
 
-    public static function unload($connect)
+    public static function unload(?PDO $connect)
     {
         $user_id = $_SESSION['user']['id'];
         $stmt = $connect->prepare("SELECT * FROM `avatar` WHERE `user_id` = ? LIMIT 1");
@@ -64,7 +77,7 @@ class Image
         return 'assets/img/avatar/default.svg';
     }
 
-    public static function delete($connect) 
+    public static function delete(?PDO $connect)
     {
         $user_id = $_SESSION['user']['id'];
 

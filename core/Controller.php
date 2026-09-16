@@ -2,10 +2,12 @@
 
 namespace Core;
 
+use PDO;
+
 class Controller
-{    
+{
     /** @var string Версия приложения */
-    const VERSION = 'v3.1.2'; 
+    const VERSION = 'v3.1.2';
 
     /** @var PDO|null Объект базы данных для выполнения запросов */
     protected $db;
@@ -15,12 +17,12 @@ class Controller
      * 
      * @param PDO|null $dbConnection
      */
-    public function __construct(?\PDO $dbConnection = null) // TODO: Изучить насколько это не костыль
+    public function __construct(?PDO $dbConnection = null)
     {
         $this->db = $dbConnection;
     }
 
-     /**
+    /**
      * Рендерит указанный шаблон и автоматически прокидывает 
      * в него переменную $auth_user (данные пользователя из сессии).
      * 
@@ -32,11 +34,11 @@ class Controller
         $data['auth_user'] = $_SESSION['user'] ?? null;
 
         extract($data);
-        
+
         ob_start();
         require_once __DIR__ . '/../views/' . $view . '.php';
         $content = ob_get_clean();
-        
+
         require_once __DIR__ . '/../views/layouts/main.php';
     }
 }

@@ -8,10 +8,7 @@
  * и настраиваться индивидуально на каждом сервере.
  *
  * @return array{
- *     app: array{
- *         debug: bool
- *     }
- * 
+ *     app: array{debug: bool},
  *     db: array{
  *         host: string,
  *         dbname: string,

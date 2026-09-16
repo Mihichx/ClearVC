@@ -7,14 +7,14 @@ use Core\Controller;
 /**
  * Контроллер для обработки основных и динамических страниц сайта.
  */
-class PageController extends Controller 
-{   
-     /**
+class PageController extends Controller
+{
+    /**
      * Отображает главную страницу сайта.
      * 
      * @return void
      */
-    public function index()
+    public function index() // TODO: Сделать отображение метода (к какому методу относиться данная функция)
     {
         $this->render('home', [
             'title' => 'Главная'

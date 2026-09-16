@@ -1,6 +1,6 @@
 <?php
 
-if (session_status() === PHP_SESSION_NONE) session_start(); 
+if (session_status() === PHP_SESSION_NONE) session_start();
 
 // Проверяем наличие автозагрузчика Composer
 $autoloadPath = __DIR__ . '/vendor/autoload.php';

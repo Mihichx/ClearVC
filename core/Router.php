@@ -2,12 +2,14 @@
 
 namespace Core;
 
+use PDO;
+
 /**
  * Класс маршрутизатора (Router).
  * Отвечает за регистрацию маршрутов и запуск соответствующих контроллеров.
  */
 class Router
-{   
+{
     /** 
      * Массив со списком всех обработанных и зарегистрированных маршрутов.
      * 
@@ -45,12 +47,12 @@ class Router
      * @param PDO|null $db Объект подключения к базе данных PDO
      * @return void
      */
-    public function dispatch($db): void
+    public function dispatch(?PDO $db): void
     {
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $uri = rtrim($uri, '/');
-        
+
         foreach ($this->routes as $route) {
             if ($route['method'] !== $method) {
                 continue;
@@ -63,7 +65,7 @@ class Router
             }
             $routePath = rtrim($route['path'], '/');
             $pattern = '#^' . preg_replace('/\{([a-z]+)\}/', '([^/]+)', $routePath) . '$#';
-            
+
             if (preg_match($pattern, $uri, $matches)) {
                 array_shift($matches);
                 [$controllerName, $action] = explode('@', $route['handler']);
@@ -88,7 +90,7 @@ class Router
      * @param PDO|null $db Объект подключения к базе данных PDO
      * @return bool Возвращает true, если контроллер и метод найдены и успешно вызваны
      */
-    private function handleDynamicModules(string $uri, $db): bool
+    private function handleDynamicModules(string $uri, ?PDO $db): bool
     {
         $uriParts = trim($uri, '/');
         if ($uriParts === '') {
@@ -97,7 +99,7 @@ class Router
 
         $segments = explode('/', $uriParts);
         $segmentCount = count($segments);
-        
+
         if ($segmentCount === 1) {
             $controllerClass = 'PageController';
             $action = $segments[0];
@@ -111,7 +113,7 @@ class Router
 
         $fullControllerClass = 'App\\Controllers\\' . $controllerClass;
         if (class_exists($fullControllerClass)) {
-            $controllerInstance = new $fullControllerClass($db);      
+            $controllerInstance = new $fullControllerClass($db);
             if (method_exists($controllerInstance, $action)) {
                 $controllerInstance->$action(...$params);
                 return true;

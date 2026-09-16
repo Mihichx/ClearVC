@@ -196,6 +196,7 @@ return [
         transition: color 0.15s ease-in-out;
         padding-left: 4px;
     }
+
     .hover-danger {
         transition: all 0.15s ease-in-out;
     }

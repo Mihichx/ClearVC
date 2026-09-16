@@ -2,7 +2,7 @@
 
 namespace Core;
 
-class ErrorHandler 
+class ErrorHandler
 {
     private static bool $debug = true;
 

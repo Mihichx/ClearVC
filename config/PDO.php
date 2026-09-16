@@ -5,7 +5,7 @@ $connect = null;
 // Используем уже загруженный в index.php массив конфигурации $config
 if (isset($config) && !empty($config['db']['dbname'])) {
     $dbConf = $config['db'];
-    
+
     if ($dbConf['host'] === 'your' || $dbConf['dbname'] === 'your') {
         return;
     }

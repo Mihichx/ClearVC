@@ -4,7 +4,7 @@
         <h1 class="display-1 fw-light text-dark mb-4" style="letter-spacing: .15rem;">
             Clear<span class="fw-normal text-danger">VC</span>
         </h1>
-        
+
         <!-- Ссылки для разработчика -->
         <div class="d-flex justify-content-center gap-4 text-uppercase fw-bold text-muted small tracking-widest mb-4">
             <a href="/docs" class="text-decoration-none text-secondary hover-danger">Documentation</a>
