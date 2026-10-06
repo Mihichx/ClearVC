@@ -1,0 +1,31 @@
+# Принудительная кодировка UTF-8
+AddDefaultCharset UTF-8
+
+# Запрет отображения структуры папок
+Options -Indexes
+
+# Перенаправление ошибки 403 внутрь фреймворка
+ErrorDocument 403 /index.php?error_status=403
+
+# Включаем движок перенаправлений ЧПУ
+RewriteEngine On
+
+# Если запрос идет к реальному файлу или папке (например, картинка в assets) — отдаем напрямую
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# В ином случае перенаправляем всё на index.php
+RewriteRule ^(.*)$ index.php [QSA,L]    
+
+# Безопасность сессий PHP (Защита от кражи кук через JS)
+php_value session.cookie_httponly 1
+
+# Заголовки безопасности (Headers)
+<IfModule mod_headers.c>
+    Header set Content-Security-Policy "default-src 'self' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; form-action 'self'; frame-ancestors 'none';"
+    Header set X-Frame-Options "DENY"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+ServerSignature Off
