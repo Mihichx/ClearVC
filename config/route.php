@@ -14,6 +14,4 @@ return [
     ['/', 'PageController@index', 'GET'],
     ['/docs', 'PageController@docs', 'GET'],
     ['/routes', 'PageController@routes', 'GET'],
-    ['*', 'DYNAMIC_MODULES_FALLBACK', 'GET'],
-    ['*', 'DYNAMIC_MODULES_FALLBACK', 'POST'],
 ];

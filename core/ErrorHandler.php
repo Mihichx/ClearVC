@@ -34,21 +34,39 @@ class ErrorHandler
         }
     }
 
-
-    private static function render(\Throwable $exception): void
+        private static function render(\Throwable $exception): void
     {
         if (ob_get_length()) ob_end_clean();
 
+        $basePath = dirname(__DIR__);
+        $statusCode = 500;
+        $text_error = 'Внутренняя ошибка сервера';
+
+        // Если у исключения есть код
+        $exceptionCode = (int)$exception->getCode();
+        if (in_array($exceptionCode, [400, 401, 403, 404, 405])) {
+            $statusCode = $exceptionCode;
+            $text_error = $exception->getMessage();
+        } 
+        // Перехватываем ошибки типов от левых POST/GET параметров
+        elseif ($exception instanceof \InvalidArgumentException || $exception instanceof \TypeError) {
+            $statusCode = 400;
+            $text_error = 'Некорректный запрос (Неверные параметры)';
+        }
+
+        // Выставляем правильный HTTP-статус в заголовки ответа
+        http_response_code($statusCode);
+
+        // Если режим отладки выключен
         if (!self::$debug) {
-            http_response_code(500);
-            $error = 500;
-            $text_error = 'Ошибка на сервере';
-            require_once __DIR__ . '/../views/errors/http.php';
+            $error = $statusCode;
+            
+            require_once $basePath . '/views/errors/http.php';
             exit;
         }
 
-        http_response_code(500);
-        require_once __DIR__ . '/../views/errors/error.php';
+        // Если режим отладки включён
+        require_once $basePath . '/views/errors/error.php';
         exit;
     }
 }
