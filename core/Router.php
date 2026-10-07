@@ -32,6 +32,17 @@ class Router
                     "Ошибка регистрации маршрута [{$route[0]}]: HTTP-метод должен быть указан явно."
                 );
             }
+
+            [$controllerName] = explode('@', $route[1]);
+            $fullControllerClass = 'App\\Controllers\\' . $controllerName;
+
+            if (!class_exists($fullControllerClass)) {
+                throw new \Exception(
+                    "Критическая ошибка в config/route.php: Контроллер '{$fullControllerClass}' не найден на диске. Создайте файл или исправьте опечатку.",
+                    500
+                );
+            }
+
             $this->routes[] = [
                 'path'    => $route[0],
                 'handler' => $route[1],
@@ -67,10 +78,6 @@ class Router
 
                 [$controllerName, $action] = explode('@', $route['handler']);
                 $fullControllerClass = 'App\\Controllers\\' . $controllerName;
-
-                if (!class_exists($fullControllerClass)) {
-                    throw new \Exception("Контроллер {$fullControllerClass} не найден.", 500);
-                }
 
                 $controller = new $fullControllerClass($db, $request);
 

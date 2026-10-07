@@ -27,7 +27,7 @@ class PageController extends Controller
      * @return void
      */
     public function docs()
-    {
+    {   
         $this->render('docs', [
             'title' => 'Документация ClearMVC'
         ]);
