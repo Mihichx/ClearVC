@@ -1,0 +1,54 @@
+# TODO: По тестить
+version: '3.8'
+
+services:
+  # Сервер Nginx
+  web:
+    image: nginx:alpine
+    container_name: clearvc_nginx
+    ports:
+      - "8080:80" # Сайт будет доступен по адресу http://localhost:8080
+    volumes:
+      - .:/var/www/clearvc
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - clearvc_net
+
+  # Интерпретатор PHP-FPM
+  app:
+    image: php:8.4-fpm-alpine
+    container_name: clearvc_php
+    volumes:
+      - .:/var/www/clearvc
+    working_dir: /var/www/clearvc
+    run_as: www-data
+    # Автоматически доставляем нужные расширения PHP (например, PDO для MySQL)
+    command: sh -c "docker-php-ext-install pdo pdo_mysql && php-fpm"
+    networks:
+      - clearvc_net
+
+  # База данных MySQL
+  db:
+    image: mysql:8.0
+    container_name: clearvc_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: clearvc_db
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: clearvc_user
+      MYSQL_PASSWORD: user_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - clearvc_net
+
+networks:
+  clearvc_net:
+    driver: bridge
+
+volumes:
+  db_data:

@@ -1,0 +1,71 @@
+// TODO: По тестить
+server {
+    listen 80;
+    listen [::]:80;
+    server_name clearvc.test www.clearvc.test;
+
+    # 1. ЖЕСТКАЯ ИЗОЛЯЦИЯ: Корень сервера смотрит СТРОГО в папку public
+    root /var/www/ClearVC.public/public;
+    index index.php;
+
+    charset utf-8;
+
+    # Отключаем паливо версии Nginx в заголовках ошибок
+    server_tokens off;
+
+    # 2. ГЛАВНЫЙ РОУТИНГ: Перенаправляем ЧПУ на index.php фреймворка
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # Логи сервера
+    access_log /var/log/nginx/clearvc-access.log;
+    error_log  /var/log/nginx/clearvc-error.log error;
+
+    # Исключения для системных файлов веб-сервера
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    # Ограничение размера загружаемых файлов (например, для аватарок)
+    client_max_body_size 12M;
+
+    # 3. БЕЗОПАСНОСТЬ СТАТИКИ: Запрещаем хакерам выполнять PHP скрипты вassets
+    location ~ ^/assets/.*\.php$ {
+        deny all;
+        return 403;
+    }
+
+    # Запрещаем доступ к скрытым файлам сервера (.htaccess, .git и т.д.)
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    # 4. ОБРАБОТКА PHP (FastCGI)
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        
+        # Укажи актуальную версию PHP-FPM твоего сервера Linux (например, 8.4)
+        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
+        fastcgi_index index.php;
+        
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+
+        # Заголовки безопасности (Headers)
+        add_header X-Frame-Options "DENY" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-XSS-Protection "1; mode=block" always;
+        add_header Content-Security-Policy "default-src 'self' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; form-action 'self'; frame-ancestors 'none';" always;
+    }
+
+    # Кэширование статики на уровне Nginx для дикой скорости
+    location ~* \.(css|js|jpg|jpeg|png|gif|ico|webp|svg|woff|woff2|ttf)$ {
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+        access_log off;
+    }
+}
