@@ -17,7 +17,7 @@
     <title><?= htmlspecialchars($title ?? 'Нет названия') ?></title>
 
     <!--ICON-->
-    <link rel="icon" type="image/png" href="/assets/img/ClearVC.svg">
+    <link rel="icon" type="image/svg" href="/assets/img/ClearVC.svg">
 
     <!--Bootstrap CSS-->
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">

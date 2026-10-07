@@ -87,7 +87,7 @@
                         <div class="card h-100 border-0 shadow-sm bg-light">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold text-danger">2. Используешь хелперы</h5>
-                                <p class="card-text text-muted small">Вызываешь глобальные инструменты ядра (например, <code>Image::load()</code>) в одну строчку кода, полностью избавляясь от рутины.</p>
+                                <p class="card-text text-muted small">Вызываешь глобальные инструменты ядра (например, <code>Image&#58;&#58;load()</code>) в одну строчку кода, полностью избавляясь от рутины.</p>
                             </div>
                         </div>
                     </div>

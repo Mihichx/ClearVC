@@ -31,7 +31,7 @@
                     <tr>
                         <td><code class="text-primary"><?= htmlspecialchars($route[0]) ?></code></td>
                         <td><code><?= htmlspecialchars($route[1]) ?></code></td>
-                        <td><span class="badge bg-success"><?= htmlspecialchars($route[2] ?? 'GET') ?></span></td>
+                        <td><span class="badge bg-success"><?= htmlspecialchars($route[2]) ?></span></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
