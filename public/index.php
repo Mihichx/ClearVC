@@ -45,6 +45,6 @@ $db = require_once $basePath . '/config/Database.php';
 $request = new Request();
 $router = new Router();
 
-$listRoute = require_once $basePath . '/config/route.php';
+$listRoute = require_once $basePath . '/config/routes.php';
 $router->add($listRoute);
 $router->dispatch($request, $db);

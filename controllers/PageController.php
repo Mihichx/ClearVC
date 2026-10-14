@@ -27,7 +27,7 @@ class PageController extends Controller
      * @return void
      */
     public function docs()
-    {   
+    {
         $this->render('docs', [
             'title' => 'Документация ClearMVC'
         ]);
@@ -40,7 +40,7 @@ class PageController extends Controller
      */
     public function routes()
     {
-        $routesList = require __DIR__ . '/../config/route.php';
+        $routesList = require __DIR__ . '/../config/routes.php';
 
         $this->render('routes', [
             'title' => 'Карта маршрутов сайта',
