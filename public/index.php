@@ -16,16 +16,14 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $basePath = dirname(__DIR__);
 
-// Проверяем наличие автозагрузчика Composer
 $autoloadPath = $basePath . '/vendor/autoload.php';
 if (!file_exists($autoloadPath)) {
     http_response_code(500);
-    require_once $basePath . '/views/errors/composer_error.php'; // TODO: Подумать над тем что бы просто текст выводить
+    require_once $basePath . '/views/errors/composer_error.php';
     exit;
 }
 require_once $autoloadPath;
 
-// Проверяем наличие конфига
 $config = $basePath . '/config/config.php';
 if (!file_exists($config)) {
     http_response_code(500);
@@ -42,9 +40,9 @@ if (class_exists('\Core\ErrorHandler')) {
 $db = require_once $basePath . '/config/Database.php';
 \Core\App::setDb($db);
 
-$request = new Request();
 $router = new Router();
+$request = new Request();
 
 $listRoute = require_once $basePath . '/config/routes.php';
 $router->add($listRoute);
-$router->dispatch($request, $db);
+$router->dispatch($request);

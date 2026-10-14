@@ -2,8 +2,6 @@
 
 namespace Core;
 
-use PDO;
-
 /**
  * Класс маршрутизатора (Router).
  * Отвечает за регистрацию маршрутов и запуск соответствующих контроллеров.
@@ -38,7 +36,7 @@ class Router
 
             if (!class_exists($fullControllerClass)) {
                 throw new \Exception(
-                    "Критическая ошибка в config/route.php: Контроллер '{$fullControllerClass}' не найден на диске. Создайте файл или исправьте опечатку.",
+                    "Критическая ошибка в config/routes.php: Контроллер '{$fullControllerClass}' не найден на диске. Создайте файл или исправьте опечатку.",
                     500
                 );
             }
@@ -55,10 +53,10 @@ class Router
      * Перехватывает текущий HTTP-запрос, ищет совпадение по базе маршрутов
      * и передает управление нужному экшену контроллера.
      * 
-     * @param PDO|null $db Объект подключения к базе данных PDO
+     * @param Request $request Объект текущего HTTP-запроса
      * @return void
      */
-    public function dispatch(Request $request, ?PDO $db): void
+    public function dispatch(Request $request): void
     {
         $method = $request->getMethod();
         $uri = $request->getUri();
@@ -71,7 +69,7 @@ class Router
 
             $routePath = ($route['path'] !== '/') ? rtrim($route['path'], '/') : '/';
             $quotedPath = preg_quote($routePath, '#');
-            $pattern = '#^' . preg_replace('/\\\{([a-z]+)\\\}/', '([^/]+)', $quotedPath) . '$#'; // TODO: Указать в документации о такой фиче
+            $pattern = '#^' . preg_replace('/\\\{([a-z]+)\\\}/', '([^/]+)', $quotedPath) . '$#';
 
             if (preg_match($pattern, $uri, $matches)) {
                 array_shift($matches);
@@ -79,13 +77,13 @@ class Router
                 [$controllerName, $action] = explode('@', $route['handler']);
                 $fullControllerClass = 'App\\Controllers\\' . $controllerName;
 
-                $controller = new $fullControllerClass($db, $request);
+                $controller = new $fullControllerClass();
 
                 if (!method_exists($controller, $action)) {
                     throw new \Exception("Метод {$action} в контроллере {$fullControllerClass} не найден.", 500);
                 }
 
-                $controller->$action(...$matches);
+                $controller->$action($request, ...$matches);
                 return;
             }
         }
