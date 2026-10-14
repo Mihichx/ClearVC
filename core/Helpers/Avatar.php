@@ -37,43 +37,35 @@ class Avatar
      */
     public static function load()
     {
-        // Проверка авторизации: если пользователя нет в сессии, жестко редиректим на главную
         if (empty($_SESSION['user'])) {
             header('Location: /');
             exit;
         }
 
-        // Если это отправка формы (загрузка файла)
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Запоминаем страницу, с которой пришел пользователь, для возврата
             $referer = $_SERVER['HTTP_REFERER'] ?? '/';
 
-            // Проверяем, передан ли файл и нет ли ошибок загрузки со стороны PHP
             if (!empty($_FILES['avatar']) && $_FILES['avatar']['error'] === 0) {
-                $tmpPath   = $_FILES['avatar']['tmp_name']; // Временный путь файла на сервере
-                $imgName   = $_FILES['avatar']['name'];     // Оригинальное имя файла от пользователя
+                $tmpPath   = $_FILES['avatar']['tmp_name'];
+                $imgName   = $_FILES['avatar']['name'];
                 $userLogin = $_SESSION['user']['login'];
                 $userId    = $_SESSION['user']['id'];
 
-                // Автоматически создаем папку для аватарок с правами 0755, если её еще нет
                 if (!is_dir(self::$dir)) {
                     mkdir(self::$dir, 0755, true);
                 }
 
-                // Извлекаем расширение в нижнем регистре и приводим 'jpeg' к единому стандарту 'jpg'
                 $extension = mb_strtolower(pathinfo($imgName, PATHINFO_EXTENSION));
                 if ($extension === 'jpeg') {
                     $extension = 'jpg';
                 }
 
-                // Поверхностная проверка по расширению файла
                 if (!in_array($extension, self::$whiteExtension, true)) {
                     $_SESSION['error'] = 'Данный формат файла не поддерживается (разрешены jpg, png)';
                     header("Location: $referer");
                     exit;
                 }
 
-                // Строгая проверка: определяем реальное содержимое файла по сигнатуре (MIME-type)
                 $finfo    = new \finfo(FILEINFO_MIME_TYPE);
                 $mimeType = $finfo->file($tmpPath);
 
@@ -83,14 +75,11 @@ class Avatar
                     exit;
                 }
 
-                // Формируем безопасное имя файла на основе логина пользователя (защита от XSS и перезаписи)
                 $imgNewName = $userLogin . '.' . $extension;
                 $finalPath  = self::$dir . $imgNewName;
 
-                // Удаляем предыдущую аватарку пользователя (из БД и с диска) перед записью новой
                 self::delete();
 
-                // Переносим файл из временной папки в постоянную
                 if (move_uploaded_file($tmpPath, $finalPath)) {
                     // Фиксируем информацию о новой аватарке в базе данных
                     $stmt = App::db()->prepare("INSERT INTO `avatar`(`user_id`, `name`) VALUES (?, ?)");
@@ -109,7 +98,6 @@ class Avatar
             }
         }
 
-        // Блок для GET-запроса: извлекаем ошибку из сессии (если она там накопилась) и удаляем её (Flash-placeholder)
         $error = $_SESSION['error'] ?? '';
         unset($_SESSION['error']);
 
@@ -127,7 +115,6 @@ class Avatar
      */
     public static function unload()
     {
-        // Если пользователь не авторизован, сразу отдаем дефолтный SVG
         if (empty($_SESSION['user']['id'])) {
             return self::$webPath . 'default.svg';
         }
@@ -135,7 +122,6 @@ class Avatar
         $userId    = $_SESSION['user']['id'];
         $userLogin = $_SESSION['user']['login'];
 
-        // Ищем запись об аватаре в БД
         $stmt = App::db()->prepare("SELECT * FROM `avatar` WHERE `user_id` = ? LIMIT 1");
         $stmt->execute([$userId]);
         $row = $stmt->fetch();
@@ -145,20 +131,16 @@ class Avatar
             $pathServer = self::$dir . $userImg;
             $pathWeb    = self::$webPath . $userImg;
 
-            // Синхронизация: если запись в БД есть, а файла на диске физически нет — чистим битую запись в БД
             if (!file_exists($pathServer)) {
                 $stmt = App::db()->prepare("DELETE FROM `avatar` WHERE `user_id` = ?");
                 $stmt->execute([$userId]);
                 return self::$webPath . 'default.svg';
             }
 
-            // Получаем время модификации файла для сброса кэша браузера (Cache Busting)
             $version = file_exists($pathServer) ? filemtime($pathServer) : 1;
 
             return $pathWeb . '?v=' . $version;
         } else {
-            // Если в БД записи нет, на всякий случай зачищаем сиротские файлы на диске,
-            // которые могли остаться из-за старых расширений (например, остался старый .png, хотя записи в БД нет)
             foreach (self::$whiteExtension as $ext) {
                 $fileName   = $userLogin . '.' . $ext;
                 $pathServer = self::$dir . $fileName;
@@ -183,14 +165,12 @@ class Avatar
      */
     public static function delete()
     {
-        // Прерываем выполнение, если метод вызван неавторизованным пользователем
         if (empty($_SESSION['user']['id'])) {
             return;
         }
 
         $userId = $_SESSION['user']['id'];
 
-        // Проверяем наличие аватарки в базе данных
         $stmt = App::db()->prepare("SELECT * FROM `avatar` WHERE `user_id` = ? LIMIT 1");
         $stmt->execute([$userId]);
         $row = $stmt->fetch();
@@ -198,12 +178,10 @@ class Avatar
         if ($row) {
             $pathServer = self::$dir . $row['name'];
 
-            // Если физический файл существует — удаляем его с диска
             if (file_exists($pathServer)) {
                 unlink($pathServer);
             }
 
-            // Удаляем информацию об аватаре из таблицы БД
             $stmt = App::db()->prepare("DELETE FROM `avatar` WHERE `user_id` = ?");
             $stmt->execute([$userId]);
         }

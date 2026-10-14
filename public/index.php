@@ -39,7 +39,8 @@ if (class_exists('\Core\ErrorHandler')) {
     \Core\ErrorHandler::register($isDebug);
 }
 
-$db = require_once $basePath . '/config/PDO.php';
+$db = require_once $basePath . '/config/Database.php';
+\Core\App::setDb($db);
 
 $request = new Request();
 $router = new Router();
